@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int longestPalindrome(vector<string>& words) {
+        unordered_map<string,int>mp;
+        int n=words.size();
+        int ans=0;
+        for(int i=0;i<n;i++){
+            string rev=words[i];
+            reverse(rev.begin(),rev.end());
+            if(mp[rev]>0){     //agr map mein reverse phle se present hai it means, word aur uske reverse ko milake 4 letter ka palindrome bn jaega
+                ans+=4;
+                mp[rev]--;
+            }
+            else{
+                mp[words[i]]++; //agr ni hai present reverse to simply current word ka count bdha diya jaegagg.
+            }
+        }
+
+        for(auto i:mp){
+            if(i.first[0]==i.first[1] && mp[i.first]>0){   //still koi word like "aa","bb","cc", etc sb bcha hua hai map mein yani inki  frequency>0 hai , to inko apn ek hi bar add kr skte hain, vo bhi bich mein and that's why only one time.
+                ans+=2;
+                break;
+            }
+        }
+
+        return ans;
+    }
+};
