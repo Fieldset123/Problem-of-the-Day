@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int minMoves(int target, int maxDoubles) {
+
+        /*
+        concept:
+        try to move from target towards 1, think greedly, doubling will help if we apply to comparatively larger number. When u get odd target, reduce by 1, when u get even target , divide it by 2 if u are remaining with doubles move else reduce the target by 1.
+        
+        
+        
+        */
+        int moves=0;
+        while(target!=1 && maxDoubles){
+            if(target%2==0){
+                target=target/2;
+                maxDoubles--;
+            }
+            else{
+                target-=1;
+            }
+            moves++;
+        }
+        moves+=target-1;
+        return moves;
+    }
+};
