@@ -1,0 +1,94 @@
+class Solution {
+public:
+//DSU
+    char find(char ch,vector<char>&parent){
+            if(ch==parent[ch-'a']){
+                return ch;
+            }
+            return parent[ch-'a']=find(parent[ch-'a'],parent);
+        }
+
+
+
+        //BFS &&  DFS
+    void dfs(char ch,char &min_char,unordered_map<char,vector<char>>graph,vector<int>&vis){
+        vis[ch-'a']=true;
+        min_char=min(ch,min_char);
+        for(int i=0;i<graph[ch].size();i++){
+            if(!vis[graph[ch][i]-'a']){
+                dfs(graph[ch][i],min_char,graph,vis);
+            }
+        }
+    }
+
+    void bfs(char ch,char &min_char,unordered_map<char,vector<char>>graph,vector<int>&vis){
+        queue<char>q;
+        q.push(ch);
+        vis[ch-'a']=true;
+        while(!q.empty()){
+            char temp=q.front();
+            q.pop();
+            min_char=min(min_char,temp);
+            for(int i=0;i<graph[temp].size();i++){
+                if(!vis[graph[temp][i]-'a']){
+                    q.push(graph[temp][i]);
+                vis[graph[temp][i]-'a']=1;
+                }
+                
+            } 
+        }
+    }
+
+
+
+    string smallestEquivalentString(string s1, string s2, string baseStr) {
+        //using BFS and DFS
+        // unordered_map<char,vector<char>>graph;
+        // for(int i=0;i<s1.length();i++){
+        //     graph[s1[i]].push_back(s2[i]);
+        //     graph[s2[i]].push_back(s1[i]);
+        // }
+
+        // string ans="";
+        // for(int i=0;i<baseStr.length();i++){
+        //     char min_char=baseStr[i];
+        //     vector<int>vis(26,0);
+        //     // dfs(baseStr[i],min_char,graph,vis);
+        //     bfs(baseStr[i],min_char,graph,vis);
+        //     ans.push_back(min_char);
+        // }
+
+        // return ans;
+
+
+
+
+        //using DSU
+        vector<char>parent(26,'-');
+        for(int i=0;i<26;i++){
+            parent[i]='a'+i;
+        }
+
+        int n=s1.length();
+        for(int i=0;i<n;i++){
+            char parent_x=find(s1[i],parent);
+            char parent_y=find(s2[i],parent);
+            char min_char=min(parent_x,parent_y);
+            char max_char=max(parent_x,parent_y);
+            if(min_char!=max_char){
+                parent[max_char-'a']=min_char;
+            }
+           
+        }
+
+
+    string ans="";
+    for(int i=0;i<baseStr.length();i++){
+        char temp=baseStr[i];
+        ans.push_back(find(temp,parent));
+    }
+
+    return ans;
+    }
+};
+
