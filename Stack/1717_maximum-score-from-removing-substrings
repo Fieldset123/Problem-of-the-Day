@@ -1,1 +1,80 @@
-..
+class Solution {
+public:
+    string removeSubstring(string &s,string target){
+        int i=0;
+        for(int j=0;j<s.length();j++){
+            s[i]=s[j];
+            i++;
+            if(i>=2 && s[i-2]==target[0] && s[i-1]==target[1]){
+                i-=2;
+            }
+        }
+        s.erase(s.begin()+i,s.end());
+
+        return s;
+    }
+    int countSubstring(stack<string>&st,string &s,string &target){
+        int n=s.length();
+        int count=0;
+         for(int i=0;i<n;i++){
+                if(!st.empty()&&(st.top()+s[i]==target)){
+                    count++;
+                    st.pop();
+                }
+                else{
+                    string str="";
+                    st.push(str+s[i]);
+                }
+            }
+         return count;
+    }
+
+
+    int maximumGain(string s, int x, int y) {
+        
+        // int score=0;
+        // stack<string>st;
+//first pass        
+        string target="";
+        if(x>y){
+            target="ab";
+        }
+        else{
+            target="ba";
+        }
+        
+    //    score+=max(x,y)*countSubstring(st,s,target);
+
+
+ //second  pass
+//        string left_over="";
+//    while(!st.empty()){
+//     left_over+=st.top();
+//     st.pop();
+//    }
+
+//    reverse(left_over.begin(),left_over.end()); //to generate left over string
+//    reverse(target.begin(),target.end());    //to generate new target i.e first pas mein "ab" check hua tha to ab "ba" check hoga
+     
+//         score+=min(x,y)*countSubstring(st,left_over,target);
+//         return score;
+
+
+
+
+    //APPROACH 2 (USING 2 POINTERS)
+//first pass
+    int ans=0;
+    int count_pass1=(s.length()-removeSubstring(s,target).length())/2;  //stores the number of larger substring that appeared in pass 1
+    count_pass1*=max(x,y);
+    ans+=count_pass1;
+//second pass
+    reverse(target.begin(),target.end());
+     int count_pass2=(s.length()-removeSubstring(s,target).length())/2;
+      count_pass2*=min(x,y);
+    ans+=count_pass2;
+
+
+    return ans;
+    }
+};
